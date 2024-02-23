@@ -35,4 +35,12 @@ export class TrainingService{
         return this.runningExercise ? { ...this.runningExercise } : null;
     }
 
+
+    
+
+    completeExercise(){}
+
+
+    cancelExercise(){}
+
 }
