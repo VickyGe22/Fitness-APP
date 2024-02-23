@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+    <div>
+      <button *ngIf="isAuth" mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div>
+      <span>FitnessTrack</span>
+    </div>
+    <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+      <ul fxLayout fxLayoutGap="8px">
+        <a *ngIf="isAuth" routerLink="/training">Training</a>
+      </ul>
+    </div>
+  </mat-toolbar>

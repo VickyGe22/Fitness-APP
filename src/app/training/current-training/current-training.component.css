@@ -1,0 +1,18 @@
+.current-training{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; /* 使用视口高度作为容器高度以实现全屏居中 */
+
+}
+
+/* 覆盖Material按钮的默认样式来减小尺寸 */
+button.mat-raised-button {
+    padding: 6px 12px; /* 减小内边距 */
+    font-size: 0.8rem; /* 减小字体大小 */
+    min-width: 64px; /* 减小最小宽度，如果需要 */
+    margin: 0 auto; /* 添加自动外边距以在水平方向上居中 */
+  }
+ 
+  

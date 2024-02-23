@@ -1,0 +1,19 @@
+a{
+    cursor: pointer;
+    color: white;
+    text-decoration: none;
+}
+
+a:hover, a:active, span:hover, span:active{
+    color: lightgrey;
+}
+
+span {
+    cursor: pointer;
+}
+
+.nav-captgion {
+    cursor: pointer;
+    padding-left: 6px;
+    vertical-align: super;
+}

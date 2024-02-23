@@ -1,0 +1,50 @@
+<div>
+    <h1 fxLayoutAlign="center center" gdAlignColumns="center center">Sign Up</h1>
+</div>
+<section>
+    <form fxLayoutGap="20px" fxLayout="column" fxLayoutAlign="center center" #f="ngForm" (ngSubmit)="onSubmit(f)">
+        <mat-form-field>
+            <mat-label>Register with your email</mat-label>
+            <input 
+            type="email" 
+            matInput 
+            placeholder="Your email" 
+            ngModel 
+            name="email"
+            email
+            required
+            #emialInput="ngModel">
+            <mat-hint>Should be a valid email</mat-hint>
+            <mat-error *ngIf="emialInput.hasError('required')">Field must not be empty</mat-error>
+            <mat-error *ngIf="!emialInput.hasError('required')">Please enter a valid email address</mat-error>
+        </mat-form-field>
+        <mat-form-field hintLabel="Should be at least 6 characters long">
+            <mat-label>Your password</mat-label>
+            <input 
+            type="password" 
+            matInput 
+            placeholder="Your password" 
+            ngModel 
+            name="password"
+            password
+            required
+            minlength="6"
+            #pwInput="ngModel">
+            <mat-hint align="end">{{ pwInput.value?.length }}/6</mat-hint>
+            <mat-error *ngIf="pwInput.hasError('required')">Field must not be empty</mat-error>
+            <mat-error *ngIf="pwInput.hasError('minlength')">Password must be at least 6 characters long</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput placeholder="Your birthdate" [matDatepicker]="picker"
+            [max]="maxDate" ngModel name="birthdate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+        </mat-form-field>
+        <mat-checkbox ngModel name="agree" required color="primary">Agree to the terms and conditions</mat-checkbox>
+        <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Create Account</button>
+    </form>
+    <p fxLayoutAlign="center center">Already have an account? 
+        <a routerLink="/"> Login </a>
+    </p>
+</section>

@@ -1,0 +1,97 @@
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation" color="primary">
+    <app-sidenav-list (closeSidenav)="sidenav.toggle()"></app-sidenav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+<!-- <div style="width: 100%; height: 100%; position: relative; background: white">
+  <div style="width: 485px; height: 485px; left: -232px; top: -225px; position: absolute; opacity: 0.50; background: linear-gradient(133deg, #1C1F80 0%, rgba(25, 28, 120, 0.01) 100%); box-shadow: 135.91409301757812px 135.91409301757812px 135.91409301757812px; filter: blur(135.91px)"></div>
+  <div style="width: 600px; height: 600px; left: 1056px; top: 1382px; position: absolute; transform: rotate(180deg); transform-origin: 0 0; background: linear-gradient(171deg, #1C1F80 0%, rgba(28, 31, 128, 0.01) 100%); box-shadow: 135.91409301757812px 135.91409301757812px 135.91409301757812px; filter: blur(135.91px)"></div> -->
+<!-- </div> -->
+
+<!-- <mat-sidenav-container>
+  <mat-sidenav #sidenav>Main menu</mat-sidenav>
+  <mat-sidenav-content>
+    <button mat-button (click)="sidenav.toggle()">SideBar</button>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+<!-- 完整
+<mat-sidenav-container>
+  <mat-sidenav #sidenav color="primary">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/" (click)="sidenav.close()">
+        <mat-icon>dashboard</mat-icon>
+        <span class="nav-captgion">Dashboard</span>
+      </a>
+      <a mat-list-item routerLink="/signup" (click)="sidenav.close()">
+        <mat-icon>face</mat-icon>
+        <span class="nav-captgion">Signup</span>
+      </a>
+      <a mat-list-item routerLink="/login" (click)="sidenav.close()">
+        <mat-icon>input</mat-icon>
+        <span class="nav-captgion">Login</span>
+      </a>
+      <a mat-list-item routerLink="/training" (click)="sidenav.close()">
+        <mat-icon>fitness_center</mat-icon>
+        <span class="nav-captgion">Training</span>
+      </a>
+      <a mat-list-item routerLink="/" (click)="sidenav.close()">
+        <mat-icon>eject</mat-icon>
+        <span class="nav-captgion">Logout</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <div>
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div>
+        <span routerLink="/">FitnessTrack</span>
+      </div>
+      <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
+        <ul fxLayout fxLayoutGap="8px">
+          <a routerLink="/training">Training</a>
+        </ul>
+      </div>
+    </mat-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container> -->
+
+<!-- 其他 -->
+<!-- 
+<section>
+  <mat-toolbar color="primary">
+    <button mat-icon-button>
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>My App</span>
+    <button mat-icon-button fxLayoutAlign="center baseline">
+      <mat-icon>favorite</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>share</mat-icon>
+    </button>
+  </mat-toolbar>
+</section> -->
+
+
+<!-- <button mat-raised-button routerLink="/">Welcome</button>
+<button mat-raised-button routerLink="/signup">Signup</button>
+<button mat-raised-button routerLink="/login">Login</button>
+<button mat-raised-button routerLink="/training">Training</button> -->
+
+
