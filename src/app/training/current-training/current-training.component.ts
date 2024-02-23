@@ -31,7 +31,7 @@ export class CurrentTrainingComponent implements OnInit {
       this.timer = setInterval(() => {
         this.progress += 5;
         if (this.progress >= 100) {
-          clearInterval(this.timer);
+          this.trainingService.completeExercise();
         }
       }, step);
     } else {
@@ -50,9 +50,10 @@ export class CurrentTrainingComponent implements OnInit {
       }
     );
 
-    DialogRef.afterClosed().subscribe(result => {
+    DialogRef.afterClosed().subscribe(result => { // 订阅对话关闭情况，根据result的赋值结果执行下一步
       if (result) {
         // this.trainingExit.emit();
+        this.trainingService.cancelExercise(this.progress)
       }else {
         this.ContinueTimer();
       }

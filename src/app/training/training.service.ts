@@ -1,3 +1,4 @@
+// import { NumberFormatStyle } from "@angular/common";
 import { ExerciseRecord } from "./exercise.model";
 import { Subject } from "rxjs"; //创建对象保存用户选择的运动方式
 
@@ -13,7 +14,7 @@ export class TrainingService{
     ]
     
 
-    runningExercise?: ExerciseRecord; //runningexercise表示用户选择的正在进行的运动
+    private runningExercise?: ExerciseRecord; //runningexercise表示用户选择的正在进行的运动
 
     getAvailableExercise(){
         return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
@@ -36,11 +37,19 @@ export class TrainingService{
     }
 
 
-    
+    private exercise: ExerciseRecord[]=[];
 
-    completeExercise(){}
+    completeExercise(){
+        this.exercise.push({...this.runningExercise, date: new Date(), state: 'completed'});
+        this.runningExercise = null;
+        this.exerciseChanged.next(null);
+    }
 
 
-    cancelExercise(){}
+    cancelExercise(progress: number){
+        this.exercise.push({...this.runningExercise, duration: this.runningExercise.duration * (progress/100), calories: this.runningExercise.calories * (progress/100),date: new Date(), state: 'cancelled'});
+        this.runningExercise = null;
+        this.exerciseChanged.next(null);
+    }
 
 }
