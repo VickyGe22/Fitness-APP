@@ -15,6 +15,7 @@ export class TrainingService{
 
     exerciseChanged = new BehaviorSubject<ExerciseRecord | null>(null);
     availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
+    finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
     private availableExercise: ExerciseRecord[] = [];
     private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
     private RPexercise = new BehaviorSubject<ExerciseRecord[]>([]); //把用户点击过的正在训练的数据记录在exercise里
@@ -65,6 +66,8 @@ export class TrainingService{
         if (this.runningExercise) {
             const completedExercise = {
                 ...this.runningExercise, 
+                duration: this.runningExercise.duration, 
+                calories: this.runningExercise.calories,
                 date: new Date(), 
                 state: 'completed' as 'completed'
             };
@@ -89,8 +92,11 @@ export class TrainingService{
         }
     }
     
-    getRelatedCancelCompletEx(){
-        return this.RPexercise.asObservable();
+    fetchCancelCompletEx(){
+        // return this.RPexercise.asObservable();
+        this.db.collection<ExerciseRecord>('finishedExercises').valueChanges().subscribe(exercises => {
+            this.finishedExercisesChanged.next(exercises);
+          });
     }
 
     private addDataToDataBase(exercise: ExerciseRecord){

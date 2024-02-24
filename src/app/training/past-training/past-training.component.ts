@@ -25,9 +25,13 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(){
     // Subscribe to the historical exercises
-    this.exChangedSubscription = this.trainingService.getRelatedCancelCompletEx().subscribe((RPexercises: ExerciseRecord[]) => {
-        this.dataSource.data = RPexercises;
-    });
+    // this.exChangedSubscription = this.trainingService.fetchCancelCompletEx().subscribe((RPexercises: ExerciseRecord[]) => {
+    //     this.dataSource.data = RPexercises;
+    // });
+    this.exChangedSubscription = this.trainingService.finishedExercisesChanged.subscribe((exercises: ExerciseRecord[]) =>{
+        this.dataSource.data = exercises
+    })
+    this.trainingService.fetchCancelCompletEx();
   }
 
   @ViewChild(MatSort) sort: MatSort | undefined;
