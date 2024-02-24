@@ -45,5 +45,11 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  doSearch(event: Event){
+    const input = event.target as HTMLInputElement; // 明确地将 event.target 断言为 HTMLInputElement
+    const value = input.value; // 现在可以安全地访问 value
+    this.dataSource.filter = value.trim().toLowerCase(); //trim处理空白
+  }
+
 }
 

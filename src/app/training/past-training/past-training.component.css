@@ -1,0 +1,18 @@
+.container {
+    margin: 20px;
+  }
+  
+  mat-card {
+    margin: 8px;
+  }
+  
+  mat-form-field {
+    width: 100%; /* Make the search box full width of the card */
+  }
+  
+  /* Style for the table */
+  mat-table {
+    width: 100%;
+  }
+  
+  

@@ -1,5 +1,10 @@
-<div class="mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort>
+<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px" class="container">
+    <mat-form-field appearance="fill">
+      <input matInput type="text" (keyup)="doSearch($event)" placeholder="Search">
+    </mat-form-field>
+</div>
+<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px" class="container">
+    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
   
       <!-- ID Column -->
       <ng-container matColumnDef="id">
