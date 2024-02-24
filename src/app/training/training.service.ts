@@ -6,14 +6,16 @@ import { BehaviorSubject } from "rxjs"; // Use BehaviorSubject instead of Subjec
 export class TrainingService{
 
     exerciseChanged = new Subject<ExerciseRecord | null>();
+
+    private AvailableExercise: ExerciseRecord[] = [];
     
 
-    private AvailableExercise: ExerciseRecord[] = [
-        { id:'1', name:'Crunches', duration:30, calories:8 },
-        { id:'2', name:'Touch Toes', duration:180, calories:10 },
-        { id:'3', name:'Side Lunges', duration:120, calories:6 },
-        { id:'4', name:'Burpees', duration:60, calories:8 },
-    ]
+    // private AvailableExercise: ExerciseRecord[] = [
+    //     { id:'1', name:'Crunches', duration:30, calories:8 },
+    //     { id:'2', name:'Touch Toes', duration:180, calories:10 },
+    //     { id:'3', name:'Side Lunges', duration:120, calories:6 },
+    //     { id:'4', name:'Burpees', duration:60, calories:8 },
+    // ]
     
     getAvailableExercise(){
         return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
