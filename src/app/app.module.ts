@@ -85,6 +85,6 @@ import { TrainingService } from './training/training.service'
   ],
   providers: [AppComponent, AuthService, TrainingService],
   bootstrap: [AppComponent],
-  entryComponents: [StopTrainingComponent]
+  // entryComponents: [StopTrainingComponent]
 })
 export class AppModule { }

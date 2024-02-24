@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "FitnessTrack:build:production"
+              "buildTarget": "FitnessTrack:build:production"
             },
             "development": {
-              "browserTarget": "FitnessTrack:build:development"
+              "buildTarget": "FitnessTrack:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "FitnessTrack:build"
+            "buildTarget": "FitnessTrack:build"
           }
         },
         "test": {
