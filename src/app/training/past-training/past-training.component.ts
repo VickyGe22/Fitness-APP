@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 })
 export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  displayedColumns: string[] = ['id', 'name', 'date', 'duration', 'calories', 'state'];
+  displayedColumns: string[] = ['id', 'name', 'duration', 'calories', 'date', 'state'];
 
   dataSource = new MatTableDataSource<ExerciseRecord>();
 
