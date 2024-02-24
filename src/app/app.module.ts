@@ -36,6 +36,9 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatCardModule} from '@angular/material/card';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableModule} from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
 
 import { AuthService } from './auth/auth.service';
 import { TrainingService } from './training/training.service'
@@ -75,7 +78,10 @@ import { TrainingService } from './training/training.service'
     MatTabsModule,
     MatCardModule,
     MatProgressSpinnerModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatSortModule
   ],
   providers: [AppComponent, AuthService, TrainingService],
   bootstrap: [AppComponent],

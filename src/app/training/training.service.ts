@@ -14,7 +14,7 @@ export class TrainingService{
     ]
     
 
-    private runningExercise: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动
+    private runningExercise: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
 
     getAvailableExercise(){
         return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
@@ -37,7 +37,7 @@ export class TrainingService{
     }
 
 
-    private exercise: ExerciseRecord[]=[];
+    private exercise: ExerciseRecord[]=[]; //把用户点击过的正在训练的数据记录在exercise里
 
     completeExercise() {
         if (this.runningExercise) {
@@ -45,7 +45,7 @@ export class TrainingService{
         }
         this.runningExercise = null;
         this.exerciseChanged.next(null);
-    }
+    } //current-Training调用，当计数结束自动退出
     
     cancelExercise(progress: number) {
         if (this.runningExercise) {
@@ -59,6 +59,10 @@ export class TrainingService{
         }
         this.runningExercise = null;
         this.exerciseChanged.next(null);
+    }  // current-Training调用，当用户result点yes的时候
+
+    getRelatedCancelCompletEx(){
+        return this.exercise.slice();
     }
 
 }
