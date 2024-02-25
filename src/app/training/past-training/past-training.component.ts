@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './past-training.component.html',
   styleUrls: ['./past-training.component.css']
 })
+
 export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   displayedColumns: string[] = ['id', 'name', 'duration', 'calories', 'date', 'state'];
@@ -43,7 +44,7 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.paginator = this.paginator !== undefined ? this.paginator : null;
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     if (this.exChangedSubscription) {
       this.exChangedSubscription.unsubscribe(); // 取消订阅
     }

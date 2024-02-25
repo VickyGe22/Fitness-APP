@@ -1,7 +1,7 @@
 // import { NumberFormatStyle } from "@angular/common";
 import { Injectable } from "@angular/core";
 import { ExerciseRecord } from "./exercise.model";
-import { Subject } from "rxjs"; //创建对象保存用户选择的运动方式
+// import { Subject } from "rxjs"; //创建对象保存用户选择的运动方式
 import { BehaviorSubject } from "rxjs"; // Use BehaviorSubject instead of Subject
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
@@ -11,23 +11,13 @@ import { map } from 'rxjs/operators';
 @Injectable()
 
 
-export class TrainingService{
+export class TrainingService {
 
-    exerciseChanged = new BehaviorSubject<ExerciseRecord | null>(null);
-    availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
-    finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
-    private availableExercise: ExerciseRecord[] = [];
-    private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
-    private RPexercise = new BehaviorSubject<ExerciseRecord[]>([]); //把用户点击过的正在训练的数据记录在exercise里
-
-    // private AvailableExercise: ExerciseRecord[] = [
-    //     { id:'1', name:'Crunches', duration:30, calories:8 },
-    //     { id:'2', name:'Touch Toes', duration:180, calories:10 },
-    //     { id:'3', name:'Side Lunges', duration:120, calories:6 },
-    //     { id:'4', name:'Burpees', duration:60, calories:8 },
-    // ]
-    
     constructor(private db: AngularFirestore){}
+
+
+    private availableExercise: ExerciseRecord[] = [];
+    availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
 
     fetchAvailableExercise(){
         // return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
@@ -48,7 +38,11 @@ export class TrainingService{
             });
     } //通过这种方式，exercise始终只存最新的数据
     
-    
+
+    private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
+    exerciseChanged = new BehaviorSubject<ExerciseRecord | null>(null);
+
+
     startTraining(selectedID: string) {
         // 使用 find 方法，并且处理找不到匹配项的情况
         this.runningExercise = this.availableExercise.find(ex => ex.id === selectedID);
@@ -61,6 +55,7 @@ export class TrainingService{
         // 如果 runningExercise 有定义，则创建一个新对象，否则返回 null 或 undefined
         return this.runningExercise ? { ...this.runningExercise } : null;
     }
+
 
     completeExercise() {
         if (this.runningExercise) {
@@ -91,10 +86,12 @@ export class TrainingService{
             this.exerciseChanged.next(null);
         }
     }
-    
+
+    finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([])
+
     fetchCancelCompletEx(){
         // return this.RPexercise.asObservable();
-        this.db.collection<ExerciseRecord>('finishedExercises').valueChanges().subscribe(exercises => {
+        this.db.collection<ExerciseRecord>('finnishedExercise').valueChanges().subscribe(exercises => {
             this.finishedExercisesChanged.next(exercises);
           });
     }
@@ -103,8 +100,19 @@ export class TrainingService{
         this.db.collection('finnishedExercise').add(exercise);
     }//当用户取消或者完成健身后，保留并储存其数据到数据库中
 
-
 }
+
+   
+   
+    // private RPexercise = new BehaviorSubject<ExerciseRecord[]>([]); //把用户点击过的正在训练的数据记录在exercise里
+
+    // private AvailableExercise: ExerciseRecord[] = [
+    //     { id:'1', name:'Crunches', duration:30, calories:8 },
+    //     { id:'2', name:'Touch Toes', duration:180, calories:10 },
+    //     { id:'3', name:'Side Lunges', duration:120, calories:6 },
+    //     { id:'4', name:'Burpees', duration:60, calories:8 },
+    // ]
+    
 
 
 // completeExercise() {
