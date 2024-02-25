@@ -23,4 +23,5 @@
     <p fxLayoutAlign="center center">Don't have an account? 
         <a routerLink="/signup"> Sign Up </a>
     </p>
+    <mat-spinner *ngIf="isLoading$" | async ></mat-spinner>
 </section>

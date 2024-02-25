@@ -8,6 +8,9 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
+import { StoreModule } from '@ngrx/store';
+import { reducers } from './app.reducer';
+
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -67,13 +70,17 @@ import { TrainingService } from './training/training.service'
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+
     MatIconModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+
     FlexLayoutModule,
+
     FormsModule,
+
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
@@ -87,10 +94,13 @@ import { TrainingService } from './training/training.service'
     MatPaginatorModule,
     MatTableModule,
     MatSortModule,
+
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    MatSnackBarModule
+
+    MatSnackBarModule,
+    StoreModule.forRoot(reducers)
   ],
   providers: [AppComponent, AuthService, TrainingService],
   bootstrap: [AppComponent],

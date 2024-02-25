@@ -8,6 +8,9 @@ import { TrainingService } from '../training/training.service';
 import { AuthData } from './auth-data.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
+import { Store } from '@ngrx/store';
+import * as fromApp from '../app.reducer';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -21,7 +24,11 @@ export class AuthService{
     authChange = new Subject<boolean>();
     private isAuthenticated = false;
 
-    constructor(private router: Router, private afAuth: AngularFireAuth, private trainingService: TrainingService, private snackBar: MatSnackBar){}
+    constructor(private router: Router, 
+        private afAuth: AngularFireAuth, 
+        private trainingService: TrainingService, 
+        private snackBar: MatSnackBar,
+        private store: Store<{ui: fromApp.State}>){}
 
 
     isAuthListener(){
@@ -53,6 +60,8 @@ export class AuthService{
         //     userId: Math.round(Math.random()*10000).toString()
         // };手动添加用户信息
 
+        this.store.dispatch({type: 'START_LOADING'});
+
         this.afAuth.createUserWithEmailAndPassword (
             authData.email,
             authData.password
@@ -71,10 +80,13 @@ export class AuthService{
                     this.snackBar.open('Verification Error');
                 });
             }
+            this.store.dispatch({type: 'STOP_LOADING'});
+
         }).catch(error => {
             this.snackBar.open(error.message, undefined, {
                 duration: 3000
             });
+            this.store.dispatch({type: 'STOP_LOADING'});
         });
     }
 
@@ -85,6 +97,9 @@ export class AuthService{
         //     email: authData.email,
         //     userId: Math.round(Math.random()*10000).toString()
         // };
+
+        this.store.dispatch({type: 'START_LOADING'});
+
         this.afAuth.signInWithEmailAndPassword(
             authData.email,
             authData.password
@@ -100,11 +115,13 @@ export class AuthService{
                 // 邮箱未验证，拒绝登录
                 this.snackBar.open('Please register your email first');
             }
+            this.store.dispatch({type: 'STOP_LOADING'});
         })
         .catch(error =>{
             this.snackBar.open(error.message, undefined, {
                 duration: 3000
-            })
+            });
+            this.store.dispatch({type: 'STOP_LOADING'});
         });
     }
 
