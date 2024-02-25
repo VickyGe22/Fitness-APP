@@ -13,10 +13,10 @@
             name="email"
             email
             required
-            #emialInput="ngModel">
+            #emailInput="ngModel">
             <mat-hint>Should be a valid email</mat-hint>
-            <mat-error *ngIf="emialInput.hasError('required')">Field must not be empty</mat-error>
-            <mat-error *ngIf="!emialInput.hasError('required')">Please enter a valid email address</mat-error>
+            <mat-error *ngIf="emailInput.hasError('required')">Field must not be empty</mat-error>
+            <mat-error *ngIf="!emailInput.hasError('required')">Please enter a valid email address</mat-error>
         </mat-form-field>
         <mat-form-field hintLabel="Should be at least 6 characters long">
             <mat-label>Your password</mat-label>

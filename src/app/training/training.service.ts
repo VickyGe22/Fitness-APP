@@ -2,7 +2,7 @@
 import { Injectable } from "@angular/core";
 import { ExerciseRecord } from "./exercise.model";
 // import { Subject } from "rxjs"; //创建对象保存用户选择的运动方式
-import { BehaviorSubject } from "rxjs"; // Use BehaviorSubject instead of Subject
+import { BehaviorSubject, Subscription } from "rxjs"; // Use BehaviorSubject instead of Subject
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { map } from 'rxjs/operators';
@@ -18,11 +18,12 @@ export class TrainingService {
 
     private availableExercise: ExerciseRecord[] = [];
     availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
+    private fbSubs: Subscription[]=[];
 
     fetchAvailableExercise(){
         // return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
         
-        this.db.collection('availableExercise').snapshotChanges().pipe(
+        this.fbSubs.push(this.db.collection('availableExercise').snapshotChanges().pipe(
             map(docArray => docArray.map(doc => {
               const data = doc.payload.doc.data() as any; // 使用as any进行类型断言
               return {
@@ -35,7 +36,11 @@ export class TrainingService {
           ).subscribe((exercise: ExerciseRecord[]) => {
                 this.availableExercise = exercise;
                 this.availableExercisesChanged.next([...this.availableExercise]);
-            });
+            }
+            // , error =>{
+            //     console.log(error)
+            // }在订阅后添加，如果出现错误，用户将看不见error
+            ));
     } //通过这种方式，exercise始终只存最新的数据
     
 
@@ -44,6 +49,8 @@ export class TrainingService {
 
 
     startTraining(selectedID: string) {
+        // this.db.doc('availableExercise/'+ selectedID).update({lastSelected: new Date()});选择一个单独文档，添加并更新里面的数据
+
         // 使用 find 方法，并且处理找不到匹配项的情况
         this.runningExercise = this.availableExercise.find(ex => ex.id === selectedID);
         if (this.runningExercise) {
@@ -91,14 +98,21 @@ export class TrainingService {
 
     fetchCancelCompletEx(){
         // return this.RPexercise.asObservable();
-        this.db.collection<ExerciseRecord>('finnishedExercise').valueChanges().subscribe(exercises => {
+        this.fbSubs.push(this.db.collection<ExerciseRecord>('finnishedExercise').valueChanges().subscribe(exercises => {
             this.finishedExercisesChanged.next(exercises);
-          });
+          }));
+    }
+
+    cancelSubscriptions(){
+        this.fbSubs.forEach(sub => sub.unsubscribe());
     }
 
     private addDataToDataBase(exercise: ExerciseRecord){
         this.db.collection('finnishedExercise').add(exercise);
     }//当用户取消或者完成健身后，保留并储存其数据到数据库中
+
+
+
 
 }
 
