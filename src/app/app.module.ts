@@ -43,6 +43,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatTableModule} from '@angular/material/table';
 import {MatSortModule} from '@angular/material/sort';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AuthService } from './auth/auth.service';
 import { TrainingService } from './training/training.service'
@@ -88,7 +89,8 @@ import { TrainingService } from './training/training.service'
     MatSortModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    MatSnackBarModule
   ],
   providers: [AppComponent, AuthService, TrainingService],
   bootstrap: [AppComponent],
