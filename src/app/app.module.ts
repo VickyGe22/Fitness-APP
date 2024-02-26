@@ -50,6 +50,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AuthService } from './auth/auth.service';
 import { TrainingService } from './training/training.service'
+import { TRReducer } from './training/training.reducer';
 
 
 @NgModule({
@@ -100,7 +101,8 @@ import { TrainingService } from './training/training.service'
     AngularFireAuthModule,
 
     MatSnackBarModule,
-    StoreModule.forRoot(reducers)
+    StoreModule.forRoot(reducers),
+    StoreModule.forFeature('training', TRReducer)
   ],
   providers: [AppComponent, AuthService, TrainingService],
   bootstrap: [AppComponent],

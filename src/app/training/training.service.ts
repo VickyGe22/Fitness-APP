@@ -1,11 +1,19 @@
 // import { NumberFormatStyle } from "@angular/common";
-import { Injectable } from "@angular/core";
-import { ExerciseRecord } from "./exercise.model";
 // import { Subject } from "rxjs"; //创建对象保存用户选择的运动方式
+
+
+import { Injectable } from "@angular/core";
 import { BehaviorSubject, Subscription } from "rxjs"; // Use BehaviorSubject instead of Subject
+import { map, take } from 'rxjs/operators';
+import { Store } from "@ngrx/store";
+
 
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { map } from 'rxjs/operators';
+
+import { ExerciseRecord } from "./exercise.model";
+
+import * as fromTraining from '../training/training.reducer';
+import * as Training from './training.actions';
 
 
 @Injectable()
@@ -13,11 +21,12 @@ import { map } from 'rxjs/operators';
 
 export class TrainingService {
 
-    constructor(private db: AngularFirestore){}
+    constructor(private db: AngularFirestore, private store: Store<fromTraining.State>){}
 
 
-    private availableExercise: ExerciseRecord[] = [];
+    // private availableExercise: ExerciseRecord[] = [];
     availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
+    
     private fbSubs: Subscription[]=[];
 
     fetchAvailableExercise(){
@@ -34,8 +43,9 @@ export class TrainingService {
               } as ExerciseRecord; // 确保返回的对象符合ExerciseRecord类型
             }))
           ).subscribe((exercise: ExerciseRecord[]) => {
-                this.availableExercise = exercise;
-                this.availableExercisesChanged.next([...this.availableExercise]);
+                // this.availableExercise = exercise;
+                // this.availableExercisesChanged.next([...this.availableExercise]);
+                this.store.dispatch(new Training.SetAvaTR(exercise))
             }
             // , error =>{
             //     console.log(error)
@@ -44,7 +54,7 @@ export class TrainingService {
     } //通过这种方式，exercise始终只存最新的数据
     
 
-    private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
+    // private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
     exerciseChanged = new BehaviorSubject<ExerciseRecord | null>(null);
 
 
@@ -52,46 +62,68 @@ export class TrainingService {
         // this.db.doc('availableExercise/'+ selectedID).update({lastSelected: new Date()});选择一个单独文档，添加并更新里面的数据
 
         // 使用 find 方法，并且处理找不到匹配项的情况
-        this.runningExercise = this.availableExercise.find(ex => ex.id === selectedID);
-        if (this.runningExercise) {
-            this.exerciseChanged.next({ ...this.runningExercise });
-        }
+        // this.runningExercise = this.availableExercise.find(ex => ex.id === selectedID);
+        // if (this.runningExercise) {
+        //     this.exerciseChanged.next({ ...this.runningExercise });
+        // }
+
+        this.store.dispatch(new Training.StartTR(selectedID))
     }
 
-    getRunningExercise() {
-        // 如果 runningExercise 有定义，则创建一个新对象，否则返回 null 或 undefined
-        return this.runningExercise ? { ...this.runningExercise } : null;
-    }
+    // getRunningExercise() {
+    //     // 如果 runningExercise 有定义，则创建一个新对象，否则返回 null 或 undefined
+    //     return this.runningExercise ? { ...this.runningExercise } : null;
+    // }
 
 
     completeExercise() {
-        if (this.runningExercise) {
-            const completedExercise = {
-                ...this.runningExercise, 
-                duration: this.runningExercise.duration, 
-                calories: this.runningExercise.calories,
-                date: new Date(), 
-                state: 'completed' as 'completed'
-            };
-            this.addDataToDataBase(completedExercise);
-            this.runningExercise = null;
-            this.exerciseChanged.next(null);
-        }
+        // if (this.runningExercise) {
+        //     const completedExercise = {
+        //         ...this.runningExercise, 
+        //         duration: this.runningExercise.duration, 
+        //         calories: this.runningExercise.calories,
+        //         date: new Date(), 
+        //         state: 'completed' as 'completed'
+        //     };
+        //     this.addDataToDataBase(completedExercise);
+        //     // this.runningExercise = null;
+        //     // this.exerciseChanged.next(null);
+        //     this.store.dispatch(new Training.StopFinnTR())
+        // }
+
+        this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
+            this.addDataToDataBase({
+                ...ex,
+                date: new Date(),
+                state: 'completed',
+            });
+            this.store.dispatch(new Training.StopFinnTR);
+          });
     }
     
     cancelExercise(progress: number) {
-        if (this.runningExercise) {
-            const cancelledExercise = {
-                ...this.runningExercise, 
-                duration: this.runningExercise.duration * (progress / 100), 
-                calories: this.runningExercise.calories * (progress / 100),
-                date: new Date(), 
-                state: 'cancelled' as 'cancelled'
-            };
-            this.addDataToDataBase(cancelledExercise);
-            this.runningExercise = null;
-            this.exerciseChanged.next(null);
-        }
+        // if (this.runningExercise) {
+        //     const cancelledExercise = {
+        //         ...this.runningExercise, 
+        //         duration: this.runningExercise.duration * (progress / 100), 
+        //         calories: this.runningExercise.calories * (progress / 100),
+        //         date: new Date(), 
+        //         state: 'cancelled' as 'cancelled'
+        //     };
+        //     this.addDataToDataBase(cancelledExercise);
+            // this.runningExercise = null;
+            // this.exerciseChanged.next(null);
+
+            this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
+                this.addDataToDataBase({
+                    ...ex,
+                    duration: ex.duration * (progress / 100),
+                    calories: ex.calories * (progress / 100),
+                    date: new Date(),
+                    state: 'completed',
+                });
+                this.store.dispatch(new Training.StopFinnTR());
+              });
     }
 
     finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([])
@@ -99,7 +131,9 @@ export class TrainingService {
     fetchCancelCompletEx(){
         // return this.RPexercise.asObservable();
         this.fbSubs.push(this.db.collection<ExerciseRecord>('finnishedExercise').valueChanges().subscribe(exercises => {
-            this.finishedExercisesChanged.next(exercises);
+            // this.finishedExercisesChanged.next(exercises);
+            this.store.dispatch(new Training.SetFinnTR(exercises))
+
           }));
     }
 
@@ -110,8 +144,6 @@ export class TrainingService {
     private addDataToDataBase(exercise: ExerciseRecord){
         this.db.collection('finnishedExercise').add(exercise);
     }//当用户取消或者完成健身后，保留并储存其数据到数据库中
-
-
 
 
 }

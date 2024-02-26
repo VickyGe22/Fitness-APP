@@ -3,7 +3,10 @@ import { TrainingService } from '../training.service';
 import { ExerciseRecord } from '../exercise.model';
 import { NgForm } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+
+import * as fromTraining from '../training.reducer';
+import { Store } from '@ngrx/store';
 
 
 
@@ -12,18 +15,21 @@ import { Subscription } from 'rxjs';
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.css']
 })
-export class NewTrainingComponent implements OnInit, OnDestroy {
+export class NewTrainingComponent implements OnInit {
 
   // 适用于存储Observable的类属性
-  Exercise: ExerciseRecord[] | undefined;
+  // Exercise: ExerciseRecord[] | undefined;
+  exercises$: Observable<ExerciseRecord[]> | undefined;
+
 
   // 适用于存储Subscription的类属性
-  private exerciseSubscription: Subscription | undefined;
+  // private exerciseSubscription: Subscription | undefined;
   
-  constructor(private trainingService: TrainingService, private db: AngularFirestore) { }
+  constructor(private trainingService: TrainingService, private db: AngularFirestore, private store: Store<fromTraining.State>) { }
   
   ngOnInit() {
-      this.exerciseSubscription = this.trainingService.availableExercisesChanged.subscribe(exercises => this.Exercise = exercises );
+      // this.exerciseSubscription = this.trainingService.availableExercisesChanged.subscribe(exercises => this.Exercise = exercises );
+      this.exercises$ = this.store.select(fromTraining.getAvailableExercises);
       this.trainingService.fetchAvailableExercise();
   }
   
@@ -34,11 +40,11 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
 
   // ... 在ngOnDestroy中取消订阅
-  ngOnDestroy() {
-    if (this.exerciseSubscription) {
-      this.exerciseSubscription.unsubscribe();
-    }
-  }
+  // ngOnDestroy() {
+  //   if (this.exerciseSubscription) {
+  //     this.exerciseSubscription.unsubscribe();
+  //   }
+  // }
 
 }
 

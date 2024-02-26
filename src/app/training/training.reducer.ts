@@ -1,36 +1,63 @@
-import { Action } from "@ngrx/store";
-import { START_LOADING, STOP_LOADING, UIActions } from "./training.actions";
+// import { Action } from "@ngrx/store";
+import { TRActions, SET_AVAILABLE_TR, SET_FINNISHED_TR, STOP_TR, START_TR } from "./training.actions";
 import { ExerciseRecord } from "./exercise.model";
-import { TrainingService } from "./training.service";
+// import { TrainingService } from "./training.service";
 
-as 
+import * as fromRoot from '../app.reducer';
+import { createFeatureSelector, createSelector } from "@ngrx/store";
 
 export interface TrainingState {
     availableExercises: ExerciseRecord[];
     finnishedExercises: ExerciseRecord[];
+    activeTraining: ExerciseRecord[];
 }
 
 export interface State extends fromRoot.State {
     training: TrainingState;
 }
 
-const initialState = {
-    isLoading: false
+const initialState: TrainingState = {
+    availableExercises: [],
+    finnishedExercises: [],
+    activeTraining: []
 };
 
-export function uiReducer(state: State = initialState, action: Action): State {
+export function TRReducer(state = initialState, action: TRActions) {
     switch (action.type) {
-        case START_LOADING:
+        case SET_AVAILABLE_TR:
             return {
-                isLoading: true
+                ...state, //防止旧数据丢失
+                availableExercises: action.payload
             };
-        case STOP_LOADING:
+        case SET_FINNISHED_TR:
             return{
-                isLoading: false
+                ...state,
+                finnishedExercises: action.payload
+            }
+        case START_TR:
+            return{
+                ...state,
+                activeTraining: {...state.activeTraining.find(ex => ex.id === action.payload)}
+            }
+        case STOP_TR:
+            return{
+                ...state,
+                activeTraining: null
             }
         default:
             return state
     }
 }
 
-export const getIsLoading = (state: State) => state.isLoading;
+// export const getAvaTraining = (state: TrainingState) => state.availableExercises;
+// export const getFinnTraining = (state: TrainingState) => state.finnishedExercises;
+// export const getActiveTraining = (state: TrainingState) => state.activeTraining;
+// export const getisTraining = (state: TrainingState) => state.activeTraining != null;
+
+export const getTrainingState = createFeatureSelector<TrainingState>('training');
+
+export const getAvailableExercises = createSelector(getTrainingState, (state: TrainingState) => state.availableExercises);
+export const getFinishedExercises = createSelector(getTrainingState, (state: TrainingState) => state.finnishedExercises);
+export const getActiveTraining = createSelector(getTrainingState, (state: TrainingState) => state.activeTraining);
+export const getIsTraining = createSelector(getTrainingState, (state: TrainingState) => state.activeTraining != null);
+

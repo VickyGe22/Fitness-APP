@@ -1,5 +1,5 @@
 <mat-tab-group>
-    <mat-tab label="Current Training" *ngIf="onGoingTraining"> 
+    <mat-tab label="Current Training" *ngIf="onGoingTraining$ | async"> 
         <!-- <app-current-training (trainingExit)="onGoingTraining=false"></app-current-training> -->
         <app-current-training></app-current-training>
     </mat-tab>

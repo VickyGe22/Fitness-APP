@@ -1,14 +1,29 @@
 import { Action } from '@ngrx/store';
+import { ExerciseRecord } from './exercise.model';
 
-export const START_LOADING = '[UI] Start Loading';
-export const STOP_LOADING = '[UI] Stop Loading';
+export const SET_AVAILABLE_TR = '[Training] Set Available Training';
+export const SET_FINNISHED_TR = '[Training] Finnished Training';
+export const START_TR = '[Training] Start Training';
+export const STOP_TR = '[Training] Stop Training';
 
-export class StartLoading implements Action {
-  readonly type = START_LOADING;
+export class SetAvaTR implements Action {
+  readonly type = SET_AVAILABLE_TR;
+  constructor(public payload: ExerciseRecord[]){}
+
 }
 
-export class StopLoading implements Action {
-  readonly type = STOP_LOADING;
+export class SetFinnTR implements Action {
+  readonly type = SET_FINNISHED_TR;
+  constructor(public payload: ExerciseRecord[]){}
 }
 
-export type UIActions = StartLoading | StopLoading;
+export class StartTR implements Action {
+  readonly type = START_TR;
+  constructor(public payload: string){}
+}
+
+export class StopFinnTR implements Action {
+  readonly type = STOP_TR;
+}
+
+export type TRActions = SetAvaTR | SetFinnTR | StartTR | StopFinnTR ;
