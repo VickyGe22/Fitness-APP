@@ -1,10 +1,15 @@
 import { Action } from "@ngrx/store";
-import { START_LOADING, STOP_LOADING, UIActions } from "./ui.actions";
+import { START_LOADING, STOP_LOADING, UIActions } from "./training.actions";
+import { ExerciseRecord } from "./exercise.model";
 
+as 
 
-export interface State {
-    isLoading: boolean;
+export interface TrainingState {
+    availableExercises: ExerciseRecord[];
+    finnishedExercises: ExerciseRecord[];
 }
+
+export interface State extends fromRoot
 
 const initialState = {
     isLoading: false

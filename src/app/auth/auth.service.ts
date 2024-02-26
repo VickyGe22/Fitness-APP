@@ -1,5 +1,5 @@
 // import { User } from './user.model';
-import { Subject } from 'rxjs';
+// import { Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,9 @@ import { AuthData } from './auth-data.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 import { Store } from '@ngrx/store';
-import * as fromApp from '../app.reducer';
+import * as fromRoot from '../app.reducer';
+import * as UI from '../share/ui.actions';
+import * as Auth from '../auth/auth.actions';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -21,22 +23,23 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AuthService{
     // private user: User | undefined | null;
 
-    authChange = new Subject<boolean>();
-    private isAuthenticated = false;
+    // authChange = new Subject<boolean>();
+    // private isAuthenticated = false;
 
     constructor(private router: Router, 
         private afAuth: AngularFireAuth, 
         private trainingService: TrainingService, 
         private snackBar: MatSnackBar,
-        private store: Store<{ui: fromApp.State}>){}
+        private store: Store<fromRoot.State>){}
 
 
     isAuthListener(){
         this.afAuth.authState.subscribe(user => {
             if (user){
                 if(user.emailVerified){
-                    this.isAuthenticated = true;
-                    this.authChange.next(true);
+                    this.store.dispatch(new Auth.SetAuth());
+                    // this.isAuthenticated = true;
+                    // this.authChange.next(true);
                     this.router.navigate(['/training']);
                 } else {
                     // 邮箱未验证，可视为未通过完整的认证流程
@@ -44,9 +47,10 @@ export class AuthService{
                     this.logout(); // 强制登出，要求用户验证邮箱
                 }
             } else {
-                this.authChange.next(false);
+                // this.authChange.next(false);
+                // this.isAuthenticated = false;
+                this.store.dispatch(new Auth.SetUnauth());
                 this.router.navigate(['/']);
-                this.isAuthenticated = false;
                 this.trainingService.cancelSubscriptions();
             }
         });
@@ -60,7 +64,7 @@ export class AuthService{
         //     userId: Math.round(Math.random()*10000).toString()
         // };手动添加用户信息
 
-        this.store.dispatch({type: 'START_LOADING'});
+        this.store.dispatch(new UI.StartLoading());
 
         this.afAuth.createUserWithEmailAndPassword (
             authData.email,
@@ -80,13 +84,13 @@ export class AuthService{
                     this.snackBar.open('Verification Error');
                 });
             }
-            this.store.dispatch({type: 'STOP_LOADING'});
+            this.store.dispatch(new UI.StopLoading());
 
         }).catch(error => {
             this.snackBar.open(error.message, undefined, {
                 duration: 3000
             });
-            this.store.dispatch({type: 'STOP_LOADING'});
+            this.store.dispatch(new UI.StopLoading());
         });
     }
 
@@ -98,7 +102,7 @@ export class AuthService{
         //     userId: Math.round(Math.random()*10000).toString()
         // };
 
-        this.store.dispatch({type: 'START_LOADING'});
+        this.store.dispatch(new UI.StartLoading());
 
         this.afAuth.signInWithEmailAndPassword(
             authData.email,
@@ -115,13 +119,13 @@ export class AuthService{
                 // 邮箱未验证，拒绝登录
                 this.snackBar.open('Please register your email first');
             }
-            this.store.dispatch({type: 'STOP_LOADING'});
+            this.store.dispatch(new UI.StopLoading());
         })
         .catch(error =>{
             this.snackBar.open(error.message, undefined, {
                 duration: 3000
             });
-            this.store.dispatch({type: 'STOP_LOADING'});
+            this.store.dispatch(new UI.StopLoading());
         });
     }
 
@@ -137,9 +141,9 @@ export class AuthService{
     }
 
     
-    isAuth(){
-        return this.isAuthenticated;
-    }
+    // isAuth(){
+    //     return this.isAuthenticated;
+    // }
 
     // private authSuccessfully(){
     //     this.isAuthenticated = true;

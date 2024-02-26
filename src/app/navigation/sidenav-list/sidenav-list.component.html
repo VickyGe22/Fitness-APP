@@ -1,4 +1,4 @@
-<mat-nav-list *ngIf="isAuth">
+<mat-nav-list *ngIf="isAuth$ | async">
     <a mat-list-item routerLink="/dashboard" (click)="onClose()">
       <mat-icon>dashboard</mat-icon>
       <span class="nav-captgion">Dashboard</span>
