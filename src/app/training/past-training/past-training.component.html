@@ -1,10 +1,10 @@
-<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px" class="container">
-    <mat-form-field fxFlex="40%" appearance="fill">
+<div fxLayout="row wrap" fxLayoutAlign="stretch stretch" fxLayoutGap="20px" class="container">
+    <mat-form-field fxFlex="100%" appearance="fill">
       <input matInput type="text" (keyup)="doSearch($event)" placeholder="Search">
     </mat-form-field>
 </div>
-<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="20px" class="container">
-    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<div fxLayout="row wrap" fxLayoutAlign="stretch stretch" fxLayoutGap="20px" class="container">
+    <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" fxFlex="100%">
   
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -48,7 +48,18 @@
   
     <mat-paginator [pageSizeOptions]="[1, 5, 10, 20]"
                    showFirstLastButtons
-                   aria-label="Select page of periodic elements">
+                   aria-label="Select page of periodic elements"
+                   fxFlex="100%">
     </mat-paginator>
+
+    <button (click)="exportToPdf(dataSource.data, 'myData')">Export to PDF</button>
+ 
 </div>
   
+
+   <!-- <button style="margin-right: 10px" type="button" pButton pRipple (click)="exportExcel()" pTooltip="XLS - Save all the lines and columns" tooltipPosition="bottom">
+      <mat-icon>exportExcel</mat-icon>
+    </button>
+    <button type="button" pButton pRipple (click)="exportPdf()" pTooltip="PDF - Save all the lines and columns" tooltipPosition="bottom">
+      <mat-icon>menu</mat-icon>
+    </button> -->

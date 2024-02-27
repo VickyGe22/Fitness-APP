@@ -11,6 +11,9 @@ import { TrainingService } from '../training.service';
 import { Store } from '@ngrx/store';
 import * as fromTraining from '../training.reducer';
 
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 
 
 @Component({
@@ -59,6 +62,24 @@ export class PastTrainingComponent implements OnInit, AfterViewInit {
     this.dataSource.filter = value.trim().toLowerCase(); //trim处理空白
   }
 
+  //   // Export management
+  exportToPdf(jsonData: any[], fileName: string): void {
+    // 创建一个新的 jsPDF 实例
+    const doc = new jsPDF();
+  
+    // 为了简化，我们将仅将 JSON 数据的键用作列名
+    const columns = Object.keys(jsonData[0]);
+    const rows = jsonData.map(obj => columns.map(column => obj[column]));
+  
+    // 使用 autoTable 添加表格
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+    });
+  
+    // 保存 PDF 文档
+    doc.save(fileName + '.pdf');
+  }
 
   // ngOnDestroy() {
   //   if (this.exChangedSubscription) {
