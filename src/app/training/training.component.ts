@@ -30,6 +30,7 @@ export class TrainingComponent implements OnInit {
     //   }
     // )
     this.onGoingTraining$ = this.store.select(fromTraining.getIsTraining)
+    console.log(this.onGoingTraining$)
   }
 
 

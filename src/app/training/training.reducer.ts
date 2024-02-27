@@ -9,7 +9,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 export interface TrainingState {
     availableExercises: ExerciseRecord[];
     finnishedExercises: ExerciseRecord[];
-    activeTraining: ExerciseRecord[];
+    activeTraining: ExerciseRecord | null;
 }
 
 export interface State extends fromRoot.State {
@@ -19,7 +19,7 @@ export interface State extends fromRoot.State {
 const initialState: TrainingState = {
     availableExercises: [],
     finnishedExercises: [],
-    activeTraining: []
+    activeTraining: null
 };
 
 export function TRReducer(state = initialState, action: TRActions) {
