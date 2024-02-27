@@ -54,7 +54,7 @@ export class TrainingService {
     } //通过这种方式，exercise始终只存最新的数据
     
 
-    // private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
+    private runningExercise?: ExerciseRecord | null = null; //runningexercise表示用户选择的正在进行的运动，一个容器暂装数据
     exerciseChanged = new BehaviorSubject<ExerciseRecord | null>(null);
 
 
@@ -70,60 +70,60 @@ export class TrainingService {
         this.store.dispatch(new Training.StartTR(selectedID))
     }
 
-    // getRunningExercise() {
-    //     // 如果 runningExercise 有定义，则创建一个新对象，否则返回 null 或 undefined
-    //     return this.runningExercise ? { ...this.runningExercise } : null;
-    // }
+    getRunningExercise() {
+        // 如果 runningExercise 有定义，则创建一个新对象，否则返回 null 或 undefined
+        return this.runningExercise ? { ...this.runningExercise } : null;
+    }
 
 
     completeExercise() {
-        // if (this.runningExercise) {
-        //     const completedExercise = {
-        //         ...this.runningExercise, 
-        //         duration: this.runningExercise.duration, 
-        //         calories: this.runningExercise.calories,
-        //         date: new Date(), 
-        //         state: 'completed' as 'completed'
-        //     };
-        //     this.addDataToDataBase(completedExercise);
-        //     // this.runningExercise = null;
-        //     // this.exerciseChanged.next(null);
-        //     this.store.dispatch(new Training.StopFinnTR())
-        // }
+        if (this.runningExercise) {
+            const completedExercise = {
+                ...this.runningExercise, 
+                duration: this.runningExercise.duration, 
+                calories: this.runningExercise.calories,
+                date: new Date(), 
+                state: 'completed' as 'completed'
+            };
+            this.addDataToDataBase(completedExercise);
+            // this.runningExercise = null;
+            // this.exerciseChanged.next(null);
+            this.store.dispatch(new Training.StopFinnTR())
+        }
 
-        this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
-            this.addDataToDataBase({
-                ...ex,
-                date: new Date(),
-                state: 'completed',
-            });
-            this.store.dispatch(new Training.StopFinnTR);
-          });
+        // this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
+        //     this.addDataToDataBase({
+        //         ...ex,
+        //         date: new Date(),
+        //         state: 'completed',
+        //     });
+        //     this.store.dispatch(new Training.StopFinnTR);
+        //   });
     }
     
     cancelExercise(progress: number) {
-        // if (this.runningExercise) {
-        //     const cancelledExercise = {
-        //         ...this.runningExercise, 
-        //         duration: this.runningExercise.duration * (progress / 100), 
-        //         calories: this.runningExercise.calories * (progress / 100),
-        //         date: new Date(), 
-        //         state: 'cancelled' as 'cancelled'
-        //     };
-        //     this.addDataToDataBase(cancelledExercise);
+        if (this.runningExercise) {
+            const cancelledExercise = {
+                ...this.runningExercise, 
+                duration: this.runningExercise.duration * (progress / 100), 
+                calories: this.runningExercise.calories * (progress / 100),
+                date: new Date(), 
+                state: 'cancelled' as 'cancelled'
+            };
+            this.addDataToDataBase(cancelledExercise);
             // this.runningExercise = null;
             // this.exerciseChanged.next(null);
+            this.store.dispatch(new Training.StopFinnTR());
 
-            this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
-                this.addDataToDataBase({
-                    ...ex,
-                    duration: ex.duration * (progress / 100),
-                    calories: ex.calories * (progress / 100),
-                    date: new Date(),
-                    state: 'completed',
-                });
-                this.store.dispatch(new Training.StopFinnTR());
-              });
+            // this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
+            //     this.addDataToDataBase({
+            //         ...ex,
+            //         duration: ex.duration * (progress / 100),
+            //         calories: ex.calories * (progress / 100),
+            //         date: new Date(),
+            //         state: 'completed',
+            //     });
+        }
     }
 
     finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([])

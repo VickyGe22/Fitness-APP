@@ -37,7 +37,7 @@ export function TRReducer(state = initialState, action: TRActions) {
         case START_TR:
             return{
                 ...state,
-                activeTraining: {...state.activeTraining.find(ex => ex.id === action.payload)}
+                activeTraining: {...state.availableExercises.find(ex => ex.id === action.payload)}
             }
         case STOP_TR:
             return{
