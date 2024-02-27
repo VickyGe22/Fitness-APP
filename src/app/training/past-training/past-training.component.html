@@ -52,7 +52,9 @@
                    fxFlex="100%">
     </mat-paginator>
 
-    <button (click)="exportToPdf(dataSource.data, 'myData')">Export to PDF</button>
+    <button type="submit" mat-raised-button color="primary" (click)="exportToPdf(dataSource.data, 'myExerciseData')">
+      <mat-icon>save_alt</mat-icon>
+    </button>
  
 </div>
   
