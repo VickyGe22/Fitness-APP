@@ -25,9 +25,10 @@ export class TrainingService {
 
 
     // private availableExercise: ExerciseRecord[] = [];
-    availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
+    // availableExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([]);
     
     private fbSubs: Subscription[]=[];
+    private lastId = 0; // 维护一个变量来追踪最后分配的ID
 
     fetchAvailableExercise(){
         // return this.AvailableExercise.slice() //与new-training绑定，用户能看到可以选择的运动类型
@@ -79,14 +80,33 @@ export class TrainingService {
     completeExercise() {
         this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
             if (ex){
+                // 创建一个新的Date对象
+                const now = new Date();
+
+                // 创建一个用于格式化日期的Intl.DateTimeFormat对象
+                const formatter = new Intl.DateTimeFormat('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                });
+
+                // 使用formatter来格式化日期
+                const formattedDate = formatter.format(now);
+
+                const newId = ++this.lastId;
+
                 const completedExercise = {
                     ...ex, 
+                    id: newId.toString(),
                     duration: ex.duration, 
                     calories: ex.calories,
-                    date: new Date(), 
+                    date: formattedDate, 
                     state: 'completed' as 'completed'
                 };
-                this.addDataToDataBase(completedExercise);
+                this.addDataToDatabase(completedExercise);
             }
             // this.runningExercise = null;
             // this.exerciseChanged.next(null);
@@ -107,14 +127,33 @@ export class TrainingService {
     cancelExercise(progress: number) {
         this.store.select(fromTraining.getActiveTraining).pipe(take(1)).subscribe(ex => {
             if (ex){
+                // 创建一个新的Date对象
+                const now = new Date();
+
+                // 创建一个用于格式化日期的Intl.DateTimeFormat对象
+                const formatter = new Intl.DateTimeFormat('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                });
+
+                // 使用formatter来格式化日期
+                const formattedDate = formatter.format(now);
+
+                const newId = ++this.lastId;
+
                 const cancelledExercise = {
                     ...ex, 
+                    id: newId.toString(),
                     duration: ex.duration * (progress / 100), 
                     calories: ex.calories * (progress / 100),
-                    date: new Date(), 
+                    date: formattedDate, 
                     state: 'cancelled' as 'cancelled'
                 };
-                this.addDataToDataBase(cancelledExercise);
+                this.addDataToDatabase(cancelledExercise);
             }
             // this.runningExercise = null;
             // this.exerciseChanged.next(null);
@@ -122,7 +161,7 @@ export class TrainingService {
         });
     }
 
-    finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([])
+    // finishedExercisesChanged = new BehaviorSubject<ExerciseRecord[]>([])
 
     fetchCancelCompletEx(){
         // return this.RPexercise.asObservable();
@@ -137,7 +176,8 @@ export class TrainingService {
         this.fbSubs.forEach(sub => sub.unsubscribe());
     }
 
-    private addDataToDataBase(exercise: ExerciseRecord){
+    private addDataToDatabase(exercise: ExerciseRecord){
+        // After the user cancels or completes a fitness session, preserve and store their data in the database
         this.db.collection('finnishedExercise').add(exercise);
     }//当用户取消或者完成健身后，保留并储存其数据到数据库中
 
