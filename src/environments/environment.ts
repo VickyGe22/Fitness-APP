@@ -1,7 +1,7 @@
 
 export const environment = {
     production: false,
-    // 其他开发环境特定的变量可以在这里添加
+
     firebase: {
         apiKey: "AIzaSyAAEjZ1UwtGTyXz5H0tfIhXBCaILgKYSx0",
         authDomain: "vivi-fitnesstracker-app.firebaseapp.com",
